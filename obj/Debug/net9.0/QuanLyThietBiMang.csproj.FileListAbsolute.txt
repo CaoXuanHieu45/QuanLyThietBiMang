@@ -1,0 +1,8 @@
+D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net9.0\QuanLyThietBiMang.csproj.AssemblyReference.cache
+D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net9.0\rpswa.dswa.cache.json
+D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net9.0\QuanLyThietBiMang.GeneratedMSBuildEditorConfig.editorconfig
+D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net9.0\QuanLyThietBiMang.AssemblyInfoInputs.cache
+D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net9.0\QuanLyThietBiMang.AssemblyInfo.cs
+D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net9.0\QuanLyThietBiMang.csproj.CoreCompileInputs.cache
+D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net9.0\QuanLyThietBiMang.MvcApplicationPartsAssemblyInfo.cs
+D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net9.0\QuanLyThietBiMang.MvcApplicationPartsAssemblyInfo.cache

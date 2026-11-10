@@ -1,0 +1,14 @@
+@QuanLyThietBiMang_HostAddress = http://localhost:5272
+
+GET {{QuanLyThietBiMang_HostAddress}}/api/sites
+Accept: application/json
+
+###
+
+GET {{QuanLyThietBiMang_HostAddress}}/api/devices
+Accept: application/json
+
+###
+
+GET {{QuanLyThietBiMang_HostAddress}}/api/devices/1
+Accept: application/json
