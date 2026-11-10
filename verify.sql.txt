@@ -6,7 +6,7 @@ WHERE Id = 1;
 
 -- 2. Câu lệnh JOIN giữa bảng Devices và Sites để xem tên thiết bị, IP và tên địa điểm
 SELECT 
-    d.Name AS TenThiBi, 
+    d.Name AS TenThietBi, 
     d.IpAddress, 
     s.Name AS TenDiaDiem
 FROM Devices d
