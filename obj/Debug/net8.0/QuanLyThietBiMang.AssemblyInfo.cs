@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QuanLyThietBiMang")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35e050416d79d7127eea4ffde5ee7b4cfbbed4ff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1ef3180f86601c6a3d94c41a5974da3b09777551")]
 [assembly: System.Reflection.AssemblyProductAttribute("QuanLyThietBiMang")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QuanLyThietBiMang")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
