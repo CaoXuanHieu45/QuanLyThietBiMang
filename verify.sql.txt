@@ -1,0 +1,13 @@
+```sql
+-- 1. Câu lệnh SELECT tìm thiết bị theo ID
+SELECT * 
+FROM Devices 
+WHERE Id = 1;
+
+-- 2. Câu lệnh JOIN giữa bảng Devices và Sites để xem tên thiết bị, IP và tên địa điểm
+SELECT 
+    d.Name AS TenThiBi, 
+    d.IpAddress, 
+    s.Name AS TenDiaDiem
+FROM Devices d
+JOIN Sites s ON d.SiteId = s.Id;
