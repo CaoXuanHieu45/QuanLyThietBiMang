@@ -42,7 +42,7 @@
     <section class="panel">
       <div class="toolbar"><div><h2>Danh sách thiết bị</h2><p>Thông tin được tải từ cơ sở dữ liệu</p></div><button class="secondary" id="refreshButton">Làm mới</button></div>
       <div class="filters"><select id="siteFilter"><option value="">Tất cả địa điểm</option></select><input id="searchInput" type="search" placeholder="Tìm theo tên hoặc địa chỉ IP"></div>
-      <div class="table-wrap"><table><thead><tr><th>Tên thiết bị</th><th>Địa chỉ IP</th><th>Địa điểm</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="deviceRows"></tbody></table><div class="empty" id="emptyState" hidden>Không có thiết bị phù hợp.</div></div>
+      <div class="table-wrap"><table><thead><tr><th>STT</th><th>Tên thiết bị</th><th>Địa chỉ IP</th><th>Địa điểm</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="deviceRows"></tbody></table><div class="empty" id="emptyState" hidden>Không có thiết bị phù hợp.</div></div>
     </section>
   </main>
   <dialog id="deviceDialog">
@@ -88,8 +88,9 @@
       const body = $('deviceRows'), query = $('searchInput').value.trim().toLowerCase(), siteId = $('siteFilter').value;
       const filtered = devices.filter(d => (!siteId || String(d.siteId) === siteId) && (!query || `${d.name} ${d.ipAddress}`.toLowerCase().includes(query)));
       body.replaceChildren();
-      filtered.forEach(device => {
+      filtered.forEach((device, index) => {
         const row = body.insertRow();
+        row.insertCell().textContent = index + 1;
         [device.name, device.ipAddress, device.siteName || ''].forEach(value => { row.insertCell().textContent = value; });
         const status = document.createElement('span'); status.className = `pill ${device.status === 'Online' ? 'online' : 'offline'}`; status.textContent = device.status;
         row.insertCell().append(status);

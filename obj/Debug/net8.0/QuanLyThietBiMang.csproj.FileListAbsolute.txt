@@ -139,3 +139,4 @@ D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net8.0\Qua
 D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net8.0\ref\QuanLyThietBiMang.dll
 D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\bin\Debug\net8.0\global.json
 D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\bin\Debug\net8.0\QuanLyThietBiMang.staticwebassets.runtime.json
+D:\Demo\ChayTruongTrinh\QuanLyThietBiMang\QuanLyThietBiMang\obj\Debug\net8.0\QuanLyThietBiMang.sourcelink.json
