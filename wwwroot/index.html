@@ -4,31 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quản lý thiết bị mạng</title>
-  <style>
-    :root { color-scheme: light; --ink:#172033; --muted:#667085; --line:#e5e9f0; --blue:#3157d5; --bg:#f5f7fb; }
-    * { box-sizing:border-box } body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 "Segoe UI",Arial,sans-serif }
-    header { background:#15213b; color:white; padding:22px max(24px,calc((100% - 1160px)/2)); display:flex; align-items:center; justify-content:space-between; gap:16px }
-    header h1 { font-size:21px; margin:0 } header p { margin:3px 0 0; color:#bac5dc; font-size:13px }
-    main { max-width:1160px; margin:28px auto; padding:0 20px }
-    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:20px }
-    .card,.panel { background:white; border:1px solid var(--line); border-radius:12px; box-shadow:0 2px 8px #19294a08 }
-    .card { padding:18px 20px } .card span { color:var(--muted); font-size:13px } .card strong { display:block; font-size:28px; margin-top:4px }
-    .panel { padding:20px; margin-bottom:20px } .toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px }
-    h2 { font-size:17px; margin:0 } .toolbar p { color:var(--muted); font-size:13px; margin:4px 0 0 }
-    button,select,input { font:inherit } button { border:0; border-radius:8px; padding:9px 14px; cursor:pointer }
-    .primary { background:var(--blue); color:white; font-weight:600 } .secondary { background:#eef1f7; color:var(--ink) }
-    .danger { color:#b42318; background:#fff0ee; padding:6px 9px } .edit { color:#2548bf; background:#edf1ff; padding:6px 9px; margin-right:5px }
-    .filters { display:flex; gap:10px; margin-bottom:14px } select,input { border:1px solid #d7dce5; border-radius:8px; padding:9px 10px; background:white; color:var(--ink) }
-    .filters select { min-width:210px } .filters input { width:min(340px,100%) }
-    .table-wrap { overflow:auto } table { width:100%; border-collapse:collapse; min-width:700px } th,td { padding:12px 10px; text-align:left; border-bottom:1px solid var(--line) } th { color:var(--muted); font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.04em }
-    .pill { display:inline-block; border-radius:20px; padding:3px 9px; font-size:12px; font-weight:600 } .online { background:#e8f7ee; color:#18794e } .offline { background:#fff0ee; color:#b42318 }
-    .empty { padding:28px; text-align:center; color:var(--muted) }
-    dialog { border:0; border-radius:14px; padding:0; width:min(460px,calc(100% - 28px)); box-shadow:0 18px 70px #10182844 } dialog::backdrop { background:#10182888 }
-    .form-head,.form-body,.form-actions { padding:18px 20px } .form-head { border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center }
-    .form-body { display:grid; gap:13px } label { display:grid; gap:6px; font-size:13px; font-weight:600 } .form-actions { display:flex; justify-content:flex-end; gap:8px; border-top:1px solid var(--line) }
-    #message { display:none; padding:11px 14px; border-radius:8px; margin-bottom:15px } #message.error { display:block; background:#fff0ee; color:#912018 } #message.success { display:block; background:#e8f7ee; color:#17603e }
-    @media(max-width:650px) { header { padding:18px 20px } main { margin:18px auto } .stats { gap:8px } .card { padding:13px } .card strong { font-size:23px } .toolbar { align-items:flex-start } .filters { flex-direction:column } .filters select,.filters input { width:100% } }
-  </style>
+  <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
   <header><div><h1>Quản lý thiết bị mạng</h1><p>Theo dõi thiết bị và địa điểm lắp đặt</p></div><button class="primary" id="addButton">+ Thêm thiết bị</button></header>
@@ -58,70 +34,6 @@
       <div class="form-actions"><button type="button" class="secondary" id="cancelButton">Hủy</button><button class="primary" type="submit">Lưu thiết bị</button></div>
     </form>
   </dialog>
-  <script>
-    const $ = (id) => document.getElementById(id);
-    let devices = [], sites = [];
-    function notify(text, type = 'error') { const el = $('message'); el.textContent = text; el.className = type; }
-    function clearMessage() { $('message').textContent = ''; $('message').className = ''; }
-    async function request(url, options) {
-      const response = await fetch(url, { ...options, headers: { 'Content-Type': 'application/json', ...(options?.headers || {}) } });
-      if (!response.ok) { let detail = ''; try { detail = (await response.json()).message || ''; } catch {} throw new Error(detail || `Lỗi máy chủ (${response.status})`); }
-      return response.status === 204 ? null : response.json();
-    }
-    async function loadData() {
-      clearMessage();
-      try {
-        [sites, devices] = await Promise.all([request('/api/sites'), request('/api/devices')]);
-        fillSites(); renderDevices();
-      } catch (error) {
-        notify(`Không tải được dữ liệu từ SQL Server. ${error.message} Kiểm tra SQL Server và quyền truy cập database QuanLyThietBiMang.`);
-      }
-    }
-    function fillSites() {
-      const filter = $('siteFilter'), form = $('deviceSite'), selected = filter.value;
-      filter.replaceChildren(new Option('Tất cả địa điểm', ''));
-      form.replaceChildren();
-      sites.forEach(site => { filter.add(new Option(site.name, site.id)); form.add(new Option(site.name, site.id)); });
-      filter.value = selected;
-    }
-    function renderDevices() {
-      const body = $('deviceRows'), query = $('searchInput').value.trim().toLowerCase(), siteId = $('siteFilter').value;
-      const filtered = devices.filter(d => (!siteId || String(d.siteId) === siteId) && (!query || `${d.name} ${d.ipAddress}`.toLowerCase().includes(query)));
-      body.replaceChildren();
-      filtered.forEach((device, index) => {
-        const row = body.insertRow();
-        row.insertCell().textContent = index + 1;
-        [device.name, device.ipAddress, device.siteName || ''].forEach(value => { row.insertCell().textContent = value; });
-        const status = document.createElement('span'); status.className = `pill ${device.status === 'Online' ? 'online' : 'offline'}`; status.textContent = device.status;
-        row.insertCell().append(status);
-        const actions = row.insertCell();
-        const edit = document.createElement('button'); edit.className = 'edit'; edit.textContent = 'Sửa'; edit.onclick = () => openForm(device);
-        const remove = document.createElement('button'); remove.className = 'danger'; remove.textContent = 'Xóa'; remove.onclick = () => deleteDevice(device);
-        actions.append(edit, remove);
-      });
-      $('emptyState').hidden = filtered.length > 0;
-      $('totalCount').textContent = devices.length; $('onlineCount').textContent = devices.filter(d => d.status === 'Online').length; $('offlineCount').textContent = devices.filter(d => d.status === 'Offline').length;
-    }
-    function openForm(device) {
-      clearMessage(); $('deviceForm').reset(); $('deviceId').value = device?.id || ''; $('formTitle').textContent = device ? 'Sửa thiết bị' : 'Thêm thiết bị';
-      if (device) { $('deviceName').value = device.name; $('deviceIp').value = device.ipAddress; $('deviceSite').value = device.siteId; $('deviceStatus').value = device.status; }
-      $('deviceDialog').showModal();
-    }
-    async function deleteDevice(device) {
-      if (!confirm(`Bạn có chắc muốn xóa thiết bị “${device.name}”?`)) return;
-      try { await request(`/api/devices/${device.id}`, { method: 'DELETE' }); notify('Đã xóa thiết bị.', 'success'); await loadData(); }
-      catch (error) { notify(`Không xóa được thiết bị: ${error.message}`); }
-    }
-    $('deviceForm').addEventListener('submit', async event => {
-      event.preventDefault(); const id = $('deviceId').value;
-      const payload = { name: $('deviceName').value.trim(), ipAddress: $('deviceIp').value.trim(), siteId: Number($('deviceSite').value), status: $('deviceStatus').value };
-      try { await request(id ? `/api/devices/${id}` : '/api/devices', { method: id ? 'PUT' : 'POST', body: JSON.stringify(payload) }); $('deviceDialog').close(); notify(id ? 'Đã cập nhật thiết bị.' : 'Đã thêm thiết bị.', 'success'); await loadData(); }
-      catch (error) { notify(`Không lưu được thiết bị: ${error.message}`); }
-    });
-    $('addButton').onclick = () => { if (!sites.length) { notify('Chưa có địa điểm để gán thiết bị. Kiểm tra kết nối database.'); return; } openForm(); };
-    $('closeButton').onclick = $('cancelButton').onclick = () => $('deviceDialog').close();
-    $('refreshButton').onclick = loadData; $('siteFilter').onchange = renderDevices; $('searchInput').oninput = renderDevices;
-    loadData();
-  </script>
+  <script type="module" src="/js/app.js"></script>
 </body>
 </html>

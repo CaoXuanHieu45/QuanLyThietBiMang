@@ -14,16 +14,7 @@ namespace QuanLyThietBiMang.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Device>()
-                .HasOne(d => d.Site)
-                .WithMany(s => s.Devices)
-                .HasForeignKey(d => d.SiteId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Device>()
-                .ToTable(table => table.HasCheckConstraint(
-                    "CK_Devices_Status",
-                    "[Status] IN ('Online', 'Offline')"));
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
     }
 }

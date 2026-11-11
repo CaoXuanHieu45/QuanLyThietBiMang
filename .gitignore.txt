@@ -1,3 +1,15 @@
-bin/
-obj/
-.vs/
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio user files
+*.suo
+*.user
+*.userprefs
+*.csproj.user
+
+# Visual Studio Code
+.vscode/
+
+# ASP.NET Core cache
+*.lock.json

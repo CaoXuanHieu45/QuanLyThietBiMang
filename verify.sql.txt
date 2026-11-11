@@ -13,7 +13,7 @@ FROM Devices d
 JOIN Sites s ON d.SiteId = s.Id;
 
 SELECT 
-    d.Name AS TenThiBi, 
+    d.Name AS TenThietBi, 
     d.IpAddress, 
     s.Name AS TenDiaDiem
 FROM Devices d
