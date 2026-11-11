@@ -1,21 +1,20 @@
 using System.Net;
-using Microsoft.EntityFrameworkCore;
-using QuanLyThietBiMang.Data;
 using QuanLyThietBiMang.Models;
+using QuanLyThietBiMang.Repositories;
 
 namespace QuanLyThietBiMang.Services;
 
 /// <summary>Kiểm tra các quy tắc dữ liệu của thiết bị.</summary>
-public sealed class DeviceValidator
+public sealed class DeviceValidator : IDeviceValidator
 {
-    private readonly AppDbContext _context;
+    private readonly ISiteRepository _sites;
 
-    public DeviceValidator(AppDbContext context)
+    public DeviceValidator(ISiteRepository sites)
     {
-        _context = context;
+        _sites = sites;
     }
 
-    public async Task<string?> ValidateAsync(Device device)
+    public async Task<string?> ValidateAsync(Device device, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(device.IpAddress) || !IPAddress.TryParse(device.IpAddress, out _))
         {
@@ -27,7 +26,7 @@ public sealed class DeviceValidator
             return "Trạng thái chỉ được nhận giá trị 'Online' hoặc 'Offline'.";
         }
 
-        var siteExists = await _context.Sites.AnyAsync(site => site.Id == device.SiteId);
+        var siteExists = await _sites.ExistsAsync(device.SiteId, cancellationToken);
         return siteExists ? null : "SiteId không tồn tại.";
     }
 }

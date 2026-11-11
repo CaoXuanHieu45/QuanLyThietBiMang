@@ -27,4 +27,13 @@ public sealed class DevicesReadController : ControllerBase
         var device = await _deviceQueries.GetByIdAsync(id);
         return device is null ? NotFound() : Ok(device);
     }
+
+    [HttpGet("{id}/transfers")]
+    public async Task<IActionResult> GetDeviceTransfers(int id)
+    {
+        var device = await _deviceQueries.GetByIdAsync(id);
+        if (device is null) return NotFound();
+
+        return Ok(await _deviceQueries.GetTransfersAsync(id));
+    }
 }

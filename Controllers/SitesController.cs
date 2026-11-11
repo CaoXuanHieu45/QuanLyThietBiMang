@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using QuanLyThietBiMang.Data;
+using QuanLyThietBiMang.Repositories;
 
 namespace QuanLyThietBiMang.Controllers
 {
@@ -8,21 +7,19 @@ namespace QuanLyThietBiMang.Controllers
     [ApiController]
     public class SitesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ISiteRepository _sites;
 
-        public SitesController(AppDbContext context)
+        public SitesController(ISiteRepository sites)
         {
-            _context = context;
+            _sites = sites;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetSites()
         {
-            var sites = await _context.Sites
-                .Select(s => new { s.Id, s.Name })
-                .ToListAsync();
+            var sites = await _sites.GetAllAsync();
 
-            return Ok(sites);
+            return Ok(sites.Select(site => new { site.Id, site.Name }));
         }
     }
 }

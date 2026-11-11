@@ -1,0 +1,17 @@
+# Build output
+bin/
+obj/
+
+# Local package cache
+.nuget/
+
+# Visual Studio / IDE
+.vs/
+.vscode/
+*.suo
+*.user
+*.userprefs
+
+# Local settings and generated files
+*.csproj.user
+*.lock.json

@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using QuanLyThietBiMang.Data;
+using QuanLyThietBiMang.Data.Repositories;
+using QuanLyThietBiMang.Data.UnitOfWork;
+using QuanLyThietBiMang.Repositories;
 using QuanLyThietBiMang.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +17,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<DeviceQueryService>();
-builder.Services.AddScoped<DeviceValidator>();
+builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
+builder.Services.AddScoped<ISiteRepository, SiteRepository>();
+builder.Services.AddScoped<IDeviceTransferRepository, DeviceTransferRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IDeviceValidator, DeviceValidator>();
 builder.Services.AddScoped<DeviceCommandService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -21,7 +21,9 @@ public sealed class DevicesWriteController : ControllerBase
         var result = await _deviceCommands.CreateAsync(deviceInput);
         if (result.Error is not null)
         {
-            return BadRequest(new { message = result.Error });
+            return result.Conflict
+                ? Conflict(new { message = result.Error })
+                : BadRequest(new { message = result.Error });
         }
 
         return CreatedAtRoute("GetDeviceById", new { id = result.Device!.Id }, result.Device);
@@ -38,7 +40,9 @@ public sealed class DevicesWriteController : ControllerBase
 
         if (result.Error is not null)
         {
-            return BadRequest(new { message = result.Error });
+            return result.Conflict
+                ? Conflict(new { message = result.Error })
+                : BadRequest(new { message = result.Error });
         }
 
         return NoContent();
@@ -47,7 +51,28 @@ public sealed class DevicesWriteController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDevice(int id)
     {
-        var deleted = await _deviceCommands.DeleteAsync(id);
-        return deleted ? NoContent() : NotFound();
+        var result = await _deviceCommands.DeleteAsync(id);
+        if (result.NotFound) return NotFound();
+        if (result.Conflict) return Conflict(new { message = result.Error });
+        return NoContent();
+    }
+
+    [HttpPost("{id}/transfers")]
+    public async Task<IActionResult> TransferDevice(int id, [FromBody] TransferRequest request)
+    {
+        var result = await _deviceCommands.TransferAsync(id, request);
+        if (result.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.Error is not null)
+        {
+            return result.Conflict
+                ? Conflict(new { message = result.Error })
+                : BadRequest(new { message = result.Error });
+        }
+
+        return StatusCode(201, result.Transfer);
     }
 }

@@ -9,6 +9,7 @@ namespace QuanLyThietBiMang.Data
 
         public DbSet<Site> Sites { get; set; }
         public DbSet<Device> Devices { get; set; }
+        public DbSet<DeviceTransfer> DeviceTransfers { get; set; } // Bổ sung DbSet cho lịch sử chuyển thiết bị
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
