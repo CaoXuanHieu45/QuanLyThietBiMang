@@ -4,7 +4,7 @@ SELECT *
 FROM Devices 
 WHERE Id = 1;
 
--- 2. Câu lệnh JOIN giữa bảng Devices và Sites để xem tên thiết bị, IP và tên địa điểm
+---- 1. Câu lệnh JOIN giữa bảng Devices và Sites để xem tên thiết bị, IP và tên địa điểm
 SELECT 
     d.Name AS TenThiBi, 
     d.IpAddress, 
@@ -18,3 +18,13 @@ SELECT
     s.Name AS TenDiaDiem
 FROM Devices d
 JOIN Sites s ON d.SiteId = s.Id;
+
+---- 2. Xem địa điểm hiện tại của thiết bị
+SELECT Id, Name, SiteId 
+FROM Devices 
+WHERE Id = 22;
+
+---- 3. Xem lịch sử chuyển thiết bị
+SELECT * 
+FROM DeviceTransfers 
+WHERE DeviceId = 22;
